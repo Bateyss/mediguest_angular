@@ -7,7 +7,9 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:mediguest_angular": "node dist/mediguest_angular/server/server.mjs"
+    "serve:ssr:mediguest_angular": "node dist/mediguest_angular/server/server.mjs",
+    "deploy-page": "ng build --configuration github-pages && npx angular-cli-ghpages --dir=dist/mediguest_angular/browser",
+    "deploy-ng-gh-pages": "ng deploy --repo=https://github.com/Bateyss/mediguest_angular.git --name=\"bateyss\" --base-href=/mediguest_angular/"
   },
   "private": true,
   "packageManager": "npm@11.16.0",
