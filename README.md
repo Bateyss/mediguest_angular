@@ -19,7 +19,7 @@ Deactivate srr with SSR=false
         "ssr": false
     }
 ```
-[See angular.json](/angular.json#59)
+[See angular.json](/angular.json#L59)
 
 Next configure package.json add into scripts:
 
@@ -30,9 +30,9 @@ Next configure package.json add into scripts:
 }
 ```
 
-[See package.json](/package.json#10)
+[See package.json](/package.json#L10)
 
-Now have 2 way to deploy the pague in github pages with the bash
+Now have 2 way to deploy the page in github pages with the bash
 
 Way 1: angular deploy (github auto configured)
 
