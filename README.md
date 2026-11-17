@@ -2,15 +2,15 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.13.
 
-## Install & Configure Angular static deploy in a ssr project
+# Install & Configure Angular static deploy in a ssr project
 
-Configure build in angular.json into configurations
+### Configure build in angular.json into configurations
 
-baseHref=url where project page will deploy
+baseHref=url where project page will deploy, changes the index context
 
 OutputMode=static as static index.html page
 
-Deactivate srr with SSR=false
+Disable srr with SSR=false
 
 ```json
     "github-pages": {
@@ -20,6 +20,15 @@ Deactivate srr with SSR=false
     }
 ```
 [See angular.json](/angular.json#L59)
+
+Add configuration for ng deploy in architect
+
+```json
+    "deploy": {
+        "builder": "angular-cli-ghpages:deploy"
+    }
+```
+[See angular.json](/angular.json#L82)
 
 Next configure package.json add into scripts:
 
@@ -32,15 +41,15 @@ Next configure package.json add into scripts:
 
 [See package.json](/package.json#L10)
 
-Now have 2 way to deploy the page in github pages with the bash
+### Now have 2 way to deploy the page in github pages with the bash
 
-Way 1: angular deploy (github auto configured)
+## Way 1: angular deploy (github auto configured)
 
 ```bash
 npm deploy-ng-gh-pages
 ```
 
-Way 2: npm deploy with angular-cli-ghpages lib
+## Way 2: npm deploy with angular-cli-ghpages lib
 
 ```bash
 npm deploy-page
