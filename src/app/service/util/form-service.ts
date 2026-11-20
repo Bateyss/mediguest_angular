@@ -1,8 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { Medico } from '../../models/medico';
+import { Paciente } from '../../models/paciente';
+import { Usuario } from '../../models/usuario';
 import { FieldConfig } from '../../models/util/field-config';
 import { SelectOption } from '../../models/util/select-option';
-import { Usuario } from '../../models/usuario';
 
 @Injectable({
   providedIn: 'root',
@@ -74,6 +76,138 @@ export class FormService {
     return [
       { id: 1, name: 'fecha_nacimiento', label: 'Fecha de Nacimiento', type: 'date', controlType: 'datepicker', validators: [Validators.required] },
       { id: 3, name: 'usuario', label: 'Persona', type: 'text', controlType: 'select', validators: [Validators.required], options: selectionUsuario },
+    ];
+  }
+
+  newHorariosControls(medicos: Array<Medico>): FieldConfig[] {
+    var dias = [{ "nombre": "Lunes", "valor": 1 },
+    { "nombre": "Martes", "valor": 2 },
+    { "nombre": "Miercoles", "valor": 3 },
+    { "nombre": "Jueves", "valor": 4 },
+    { "nombre": "Viernes", "valor": 5 },
+    { "nombre": "Sabado", "valor": 6 },
+    { "nombre": "Domingo", "valor": 7 },
+    ];
+    var horas = [];
+    for (let index = 0; index < 24; index++) {
+      horas.push(index);
+    }
+
+    var selectionMedico: Array<SelectOption> = [];
+    var selectionDia: Array<SelectOption> = [];
+    var selectionHoraInicio: Array<SelectOption> = [];
+    var selectionHoraFin: Array<SelectOption> = [];
+    medicos.forEach(
+      modelo => selectionMedico.push({ id: modelo.id, name: modelo.usuario.persona.nombre + ' ' + modelo.usuario.persona.apellido, value: modelo })
+    );
+    dias.forEach(
+      modelo => selectionDia.push({ id: modelo.valor, name: modelo.nombre, value: modelo.valor })
+    );
+    horas.forEach(
+      modelo => {
+        selectionHoraInicio.push({ id: modelo, name: ' ' + modelo, value: modelo });
+        selectionHoraFin.push({ id: modelo, name: ' ' + modelo, value: modelo })
+      }
+    );
+    return [
+      { id: 1, name: 'medico', label: 'Medico', type: 'text', controlType: 'select', validators: [Validators.required], options: selectionMedico },
+      { id: 2, name: 'dia_semana', label: 'Dia de semana', type: 'number', controlType: 'select', validators: [Validators.required], options: selectionDia },
+      { id: 3, name: 'hora_inicio', label: 'Hora inicio', type: 'number', controlType: 'select', validators: [Validators.required], options: selectionHoraInicio },
+      { id: 4, name: 'hora_fin', label: 'Hora Fin', type: 'number', controlType: 'select', validators: [Validators.required], options: selectionHoraFin },
+    ];
+  }
+
+  newCitasControls(medicos: Array<Medico>, pacientes: Array<Paciente>): FieldConfig[] {
+    var selectionMedico: Array<SelectOption> = [];
+    var selectionPaciente: Array<SelectOption> = [];
+    medicos.forEach(
+      modelo => selectionMedico.push({ id: modelo.id, name: modelo.usuario.persona.nombre + ' ' + modelo.usuario.persona.apellido, value: modelo })
+    );
+    pacientes.forEach(
+      modelo => selectionPaciente.push({ id: modelo.id, name: modelo.usuario.persona.nombre + ' ' + modelo.usuario.persona.apellido, value: modelo })
+    );
+    return [
+      {
+        id: 1,
+        label: 'Fecha de la cita',
+        type: 'date',
+        controlType: 'datepicker',
+        name: 'fecha_cita',
+        validators: [Validators.required],
+        label_hint: 'Seleccione la fecha',
+      },
+      {
+        id: 2,
+        label: 'Hora de la cita',
+        type: 'text',
+        controlType: 'select',
+        name: 'hora_cita',
+        validators: [Validators.required],
+        options: [
+          { id: 13, name: '05:00', value: '05:00' },
+          { id: 14, name: '06:00', value: '06:00' },
+          { id: 15, name: '07:00', value: '07:00' },
+          { id: 1, name: '08:00', value: '08:00' },
+          { id: 2, name: '09:00', value: '09:00' },
+          { id: 3, name: '10:00', value: '10:00' },
+          { id: 4, name: '08:00', value: '08:00' },
+          { id: 5, name: '11:00', value: '11:00' },
+          { id: 6, name: '12:00', value: '12:00' },
+          { id: 7, name: '13:00', value: '13:00' },
+          { id: 8, name: '14:00', value: '14:00' },
+          { id: 9, name: '15:00', value: '15:00' },
+          { id: 10, name: '16:00', value: '16:00' },
+          { id: 11, name: '17:00', value: '17:00' },
+          { id: 12, name: '19:00', value: '19:00' },
+          { id: 13, name: '20:00', value: '20:00' },
+          { id: 14, name: '21:00', value: '21:00' },
+          { id: 15, name: '22:00', value: '22:00' }
+        ],
+        label_hint: 'Seleccione la hora',
+      },
+      {
+        id: 3,
+        label: 'Paciente',
+        type: 'text',
+        controlType: 'select',
+        name: 'paciente',
+        validators: [Validators.required],
+        options: selectionPaciente, // se poblará dinámicamente
+        label_hint: 'Seleccione el paciente',
+      },
+      {
+        id: 4,
+        label: 'Médico',
+        type: 'text',
+        controlType: 'select',
+        name: 'medico',
+        validators: [Validators.required],
+        options: selectionMedico, // se poblará dinámicamente
+        label_hint: 'Seleccione el médico',
+      },
+      {
+        id: 5,
+        label: 'Motivo de la consulta',
+        type: 'text',
+        controlType: 'input',
+        name: 'motivo_consulta',
+        validators: [Validators.required],
+        label_hint: 'Breve descripción del motivo',
+      },
+      {
+        id: 6,
+        label: 'Estado',
+        type: 'text',
+        controlType: 'select',
+        name: 'estado',
+        validators: [Validators.required],
+        options: [
+          { id: 1, name: 'programado', value: 'programado' },
+          { id: 2, name: 'reprogramado', value: 'reprogramado' },
+          { id: 3, name: 'finalizada', value: 'finalizada' },
+          { id: 4, name: 'cancelada', value: 'cancelada' }],
+        label_hint: 'Seleccione el estado',
+      },
     ];
   }
 }

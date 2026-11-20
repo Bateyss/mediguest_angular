@@ -38,6 +38,8 @@ export class Inicio implements OnInit {
     var nuevosMenus: Array<Menu> = [];
     nuevosMenus.push({ id: 1, ruta: '/menu/login', nombre: 'Iniciar Sesion' });
     nuevosMenus.push({ id: 2, ruta: '/menu/pacientes', nombre: 'Pacientes' });
+    nuevosMenus.push({ id: 3, ruta: '/menu/horarios', nombre: 'Horarios' });
+    nuevosMenus.push({ id: 4, ruta: '/menu/citas', nombre: 'Citas' });
     this.menusList.update(valores => [...nuevosMenus]);
   }
 
