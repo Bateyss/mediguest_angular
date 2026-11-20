@@ -32,11 +32,26 @@ export abstract class AbstractService<Entity extends EntityModel> {
 
         return responseList;
     }
-    pushEntity(datos: Entity) {
+    pushEntity(datos: Entity): Entity {
         var entityList: Array<Entity> = this.getEntityList();
         datos.id = entityList[entityList.length - 1].id + 1;
         entityList.push(datos);
         this.localStorageService.setItem(this.storageID, entityList);
+        return datos;
+    }
+
+    updateEntity(datos: Entity): Entity {
+        var entityList: Array<Entity> = this.getEntityList();
+        var entityListNueva: Array<Entity> = [];
+        entityList.forEach(arrData => {
+            var newData: Entity = arrData;
+            if (newData.id == datos.id) {
+                newData = datos;
+            }
+            entityListNueva.push(newData);
+        });
+        this.localStorageService.setItem(this.storageID, entityListNueva);
+        return datos;
     }
 }
 

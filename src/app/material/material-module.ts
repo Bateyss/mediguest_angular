@@ -93,7 +93,7 @@ export class MaterialModule { }
     declarations: [],
     imports: [],
     exports: [
-        MatButtonModule, MatIconModule, MatDialogModule, MatCardModule, MatFormFieldModule, MatGridListModule, MatSelectModule, MatInputModule, ReactiveFormsModule, CommonModule
+        MatDatepickerModule, MatButtonModule, MatIconModule, MatDialogModule, MatCardModule, MatFormFieldModule, MatGridListModule, MatSelectModule, MatInputModule, ReactiveFormsModule, CommonModule
     ]
 })
 export class MaterialFormDialogModule { }

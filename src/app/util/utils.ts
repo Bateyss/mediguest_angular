@@ -43,14 +43,14 @@ export class Utils {
     }
 
     static randomString(length: number) {
-        var chars = ' 0123456789 abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ ';
+        var chars = ' 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_- ';
         var result = '';
-        for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+        for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * (chars.length - 1)) | 0];
         return result;
     }
 
     static randomSelect<Modelo>(array: Array<Modelo>): Modelo {
-        var result = array[Math.floor(Math.random() * array.length) | 1];
+        var result = array[Math.floor(Math.random() * array.length) | 0];
         return result;
     }
 
