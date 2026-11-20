@@ -5,6 +5,6 @@ export interface Usuario {
     persona: Persona;
     usuario: string;
     password: string;
-    rol: "paciente" | "medico" | "recepcionista"|"administrador";
-    estado: "activo"|"inactivo";
+    rol: "paciente" | "medico" | "recepcionista" | "administrador";
+    estado: "activo" | "inactivo";
 }

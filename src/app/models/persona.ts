@@ -7,6 +7,6 @@ export interface Persona extends EntityModel {
     tipo_documento: "DUI" | "RESIDENTE" | "PASAPORTE";
     numero_documento: string;
     numero_telefono: string;
-    email:string;
-    genero: "masculino"|"femenino"|"otros"
+    email: string;
+    genero: "masculino" | "femenino" | "otros"
 }
