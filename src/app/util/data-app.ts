@@ -12,6 +12,7 @@ import { Utils } from "./utils";
 
 export class DataApp {
     static readonly LOGGED: string = 'logged';
+    public static readonly LOGGED_USUARIO: string = 'usuario';
 
     static readonly PERSONA_ID: string = 'personaList';
     static readonly USUARIO_ID: string = 'usuarioList';
@@ -132,6 +133,17 @@ export class DataApp {
         }
     }
 
+    static getUsuarioAnonimo(): Usuario {
+        return {
+            id: 1,
+            persona: this.getPersonaVacio(),
+            usuario: 'anonim',
+            password: 'anonim',
+            rol: "paciente",
+            estado: "activo",
+        }
+    }
+
     // ########################################################################################################
     // asd
     // ########################################################################################################
@@ -155,6 +167,7 @@ export class DataApp {
 
     static getUsuarioListRandom(): Array<Usuario> {
         var datosList: Array<Usuario> = [];
+        datosList.push(this.getUsuarioAnonimo())
         for (let index = 0; index < Utils.randomInt(10, 1); index++) {
             datosList.push({
                 id: index,
