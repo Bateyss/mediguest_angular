@@ -1,0 +1,68 @@
+<div #contenido>
+    <mat-card class="agenda-card">
+        <mat-card-title>Agenda de Citas</mat-card-title>
+
+        <!-- Formulario para filtro por fecha -->
+        @if (fechaForm && formConfigs().length) {
+        <app-shared-form [form]="fechaForm" [formConfigs]="formConfigs()" [botonText]="'Buscar'"
+            (formSubmit)="onFechaChange()"></app-shared-form>
+        }
+
+        <button mat-raised-button color="primary" (click)="limpiarFiltro()">
+            Limpiar Filtro
+        </button>
+
+        <!-- Lista de citas -->
+        <table mat-table class="mat-elevation-z2" [dataSource]="citas()">
+            <!-- ID -->
+            <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef>ID</th>
+                <td mat-cell *matCellDef="let c"> {{ c.id }} </td>
+            </ng-container>
+
+            <!-- Horario médico -->
+            <ng-container matColumnDef="horarioMedico">
+                <th mat-header-cell *matHeaderCellDef>Horario</th>
+                <td mat-cell *matCellDef="let c">
+                    {{ c.horario_medico?.hora_inicio | hourPipe }} - {{ c.horario_medico?.hora_fin | hourPipe }}
+                </td>
+            </ng-container>
+
+            <!-- Paciente -->
+            <ng-container matColumnDef="paciente">
+                <th mat-header-cell *matHeaderCellDef>Paciente</th>
+                <td mat-cell *matCellDef="let c">
+                    {{ c.paciente?.usuario?.persona?.nombre }} {{ c.paciente?.usuario?.persona?.apellido }}
+                </td>
+            </ng-container>
+
+            <!-- Estado -->
+            <ng-container matColumnDef="estado">
+                <th mat-header-cell *matHeaderCellDef>Estado</th>
+                <td mat-cell *matCellDef="let c"> {{ c.estado | uppercase }} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+
+        <!-- Mensaje de error del componente -->
+        @if (error()) {
+        <div style="color: red; margin-top: 1rem;">
+            {{ error() }}
+        </div>
+        }
+
+        <!-- Mensaje cuando no hay resultados -->
+        @if (!loading && citas().length === 0) {
+        <div style="margin-top: 1rem;">
+            <mat-icon>info</mat-icon> No hay citas para la fecha seleccionada.
+        </div>
+        }
+
+        @if (loading()) {
+        <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+        }
+
+    </mat-card>
+</div>
