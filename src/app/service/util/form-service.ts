@@ -1,5 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { Cita } from '../../models/cita';
+import { ConsultaMedica } from '../../models/consulta-medica';
+import { Expediente } from '../../models/expediente';
+import { HorarioMedico } from '../../models/horario-medico';
 import { Medico } from '../../models/medico';
 import { Paciente } from '../../models/paciente';
 import { Usuario } from '../../models/usuario';
@@ -117,14 +121,14 @@ export class FormService {
     ];
   }
 
-  newCitasControls(medicos: Array<Medico>, pacientes: Array<Paciente>): FieldConfig[] {
+  newCitasControls(medicos: Array<HorarioMedico>, pacientes: Array<Paciente>): FieldConfig[] {
     var selectionMedico: Array<SelectOption> = [];
     var selectionPaciente: Array<SelectOption> = [];
     medicos.forEach(
-      modelo => selectionMedico.push({ id: modelo.id, name: modelo.usuario.persona.nombre + ' ' + modelo.usuario.persona.apellido, value: modelo })
+      modelo => selectionMedico.push({ id: modelo.id, name: modelo.medico?.usuario?.persona?.nombre + ' ' + modelo.medico?.usuario?.persona?.apellido, value: modelo })
     );
     pacientes.forEach(
-      modelo => selectionPaciente.push({ id: modelo.id, name: modelo.usuario.persona.nombre + ' ' + modelo.usuario.persona.apellido, value: modelo })
+      modelo => selectionPaciente.push({ id: modelo.id, name: modelo.usuario?.persona?.nombre + ' ' + modelo.usuario?.persona?.apellido, value: modelo })
     );
     return [
       {
@@ -139,29 +143,29 @@ export class FormService {
       {
         id: 2,
         label: 'Hora de la cita',
-        type: 'text',
+        type: 'number',
         controlType: 'select',
         name: 'hora_cita',
         validators: [Validators.required],
         options: [
-          { id: 13, name: '05:00', value: '05:00' },
-          { id: 14, name: '06:00', value: '06:00' },
-          { id: 15, name: '07:00', value: '07:00' },
-          { id: 1, name: '08:00', value: '08:00' },
-          { id: 2, name: '09:00', value: '09:00' },
-          { id: 3, name: '10:00', value: '10:00' },
-          { id: 4, name: '08:00', value: '08:00' },
-          { id: 5, name: '11:00', value: '11:00' },
-          { id: 6, name: '12:00', value: '12:00' },
-          { id: 7, name: '13:00', value: '13:00' },
-          { id: 8, name: '14:00', value: '14:00' },
-          { id: 9, name: '15:00', value: '15:00' },
-          { id: 10, name: '16:00', value: '16:00' },
-          { id: 11, name: '17:00', value: '17:00' },
-          { id: 12, name: '19:00', value: '19:00' },
-          { id: 13, name: '20:00', value: '20:00' },
-          { id: 14, name: '21:00', value: '21:00' },
-          { id: 15, name: '22:00', value: '22:00' }
+          { id: 13, name: '05:00', value: 5 },
+          { id: 14, name: '06:00', value: 6 },
+          { id: 15, name: '07:00', value: 7 },
+          { id: 1, name: '08:00', value: 8 },
+          { id: 2, name: '09:00', value: 9 },
+          { id: 3, name: '10:00', value: 10 },
+          { id: 4, name: '08:00', value: 11 },
+          { id: 5, name: '11:00', value: 12 },
+          { id: 6, name: '12:00', value: 13 },
+          { id: 7, name: '13:00', value: 14 },
+          { id: 8, name: '14:00', value: 15 },
+          { id: 9, name: '15:00', value: 16 },
+          { id: 10, name: '16:00', value: 17 },
+          { id: 11, name: '17:00', value: 18 },
+          { id: 12, name: '19:00', value: 19 },
+          { id: 13, name: '20:00', value: 20 },
+          { id: 14, name: '21:00', value: 21 },
+          { id: 15, name: '22:00', value: 22 }
         ],
         label_hint: 'Seleccione la hora',
       },
@@ -180,7 +184,7 @@ export class FormService {
         label: 'Médico',
         type: 'text',
         controlType: 'select',
-        name: 'medico',
+        name: 'horario_medico',
         validators: [Validators.required],
         options: selectionMedico, // se poblará dinámicamente
         label_hint: 'Seleccione el médico',
@@ -207,6 +211,204 @@ export class FormService {
           { id: 3, name: 'finalizada', value: 'finalizada' },
           { id: 4, name: 'cancelada', value: 'cancelada' }],
         label_hint: 'Seleccione el estado',
+      },
+    ];
+  }
+
+  newConsultaFiltrosControls(expedientes: Array<Expediente>, medicos: Array<Medico>): FieldConfig[] {
+    var selectionMedico: Array<SelectOption> = [];
+    var selectionExpediente: Array<SelectOption> = [];
+    medicos.forEach(
+      modelo => selectionMedico.push({ id: modelo.id, name: modelo.usuario?.persona?.nombre + ' ' + modelo.usuario?.persona?.apellido, value: modelo })
+    );
+    expedientes.forEach(
+      modelo => selectionExpediente.push({ id: modelo.id, name: modelo.fecha_apertura + ' ' + modelo.paciente?.usuario?.persona?.nombre + ' ' + modelo.paciente?.usuario?.persona?.apellido, value: modelo })
+    );
+    return [
+      {
+        id: 1,
+        label: 'Expediente',
+        type: 'text',
+        controlType: 'select',
+        name: 'expediente',
+        validators: [],
+        options: selectionExpediente, // se poblará dinámicamente
+        label_hint: 'Seleccione el expediente',
+      },
+      {
+        id: 2,
+        label: 'Médico',
+        type: 'text',
+        controlType: 'select',
+        name: 'medico',
+        validators: [],
+        options: selectionMedico, // se poblará dinámicamente
+        label_hint: 'Seleccione el médico',
+      },
+    ];
+  }
+
+  newConsultaControls(expedientes: Array<Expediente>, citas: Array<Cita>, medicos: Array<Medico>): FieldConfig[] {
+    var selectionMedico: Array<SelectOption> = [];
+    var selectionCita: Array<SelectOption> = [];
+    var selectionExpediente: Array<SelectOption> = [];
+    medicos.forEach(
+      modelo => selectionMedico.push({ id: modelo.id, name: modelo.usuario?.persona?.nombre + ' ' + modelo.usuario?.persona?.apellido, value: modelo })
+    );
+    citas.forEach(
+      modelo => selectionCita.push({ id: modelo.id, name: modelo.fecha_cita + ' ' + modelo.paciente?.usuario?.persona?.nombre + ' ' + modelo.paciente?.usuario?.persona?.apellido, value: modelo })
+    );
+    expedientes.forEach(
+      modelo => selectionExpediente.push({ id: modelo.id, name: modelo.fecha_apertura + ' ' + modelo.paciente?.usuario?.persona?.nombre + ' ' + modelo.paciente?.usuario?.persona?.apellido, value: modelo })
+    );
+    return [
+      {
+        id: 1,
+        label: 'Expediente',
+        type: 'text',
+        controlType: 'select',
+        name: 'expediente',
+        validators: [Validators.required],
+        options: selectionExpediente, // se poblará dinámicamente
+        label_hint: 'Seleccione el expediente',
+      },
+      {
+        id: 2,
+        label: 'Cita',
+        type: 'text',
+        controlType: 'select',
+        name: 'cita',
+        validators: [Validators.required],
+        options: selectionCita, // se poblará dinámicamente
+        label_hint: 'Seleccione el expediente',
+      },
+      {
+        id: 3,
+        label: 'Médico',
+        type: 'text',
+        controlType: 'select',
+        name: 'medico',
+        validators: [Validators.required],
+        options: selectionMedico, // se poblará dinámicamente
+        label_hint: 'Seleccione el médico',
+      },
+      {
+        id: 4,
+        name: 'fecha_atencion', label: 'Fecha de atencion',
+        type: 'date', controlType: 'datepicker',
+        validators: [Validators.required]
+      },
+      {
+        id: 5,
+        name: 'diagnostico', label: 'Diagnostico',
+        type: 'text', controlType: 'input',
+        validators: [Validators.required, Validators.minLength(3)]
+        , min: 3
+      },
+      {
+        id: 6,
+        name: 'nota_evolucion', label: 'Nota de evolucion',
+        type: 'text', controlType: 'input',
+        validators: [Validators.required, Validators.minLength(3)]
+        , min: 3
+      },
+    ];
+  }
+
+  newFechaControl(): FieldConfig[] {
+    return [
+      {
+        id: 1,
+        name: 'fecha', label: 'Fecha de Nacimiento',
+        type: 'date', controlType: 'datepicker',
+        validators: [Validators.required]
+      },
+    ];
+  }
+
+  newExpedienteControls(pacientes: Array<Paciente>): FieldConfig[] {
+    var selectionPaciente: Array<SelectOption> = [];
+    pacientes.forEach(
+      modelo => selectionPaciente.push({ id: modelo.id, name: modelo.usuario?.persona?.nombre + ' ' + modelo.usuario?.persona?.apellido, value: modelo })
+    );
+    return [
+      {
+        id: 1,
+        label: 'Paciente',
+        type: 'text',
+        controlType: 'select',
+        name: 'paciente',
+        validators: [Validators.required],
+        options: selectionPaciente, // se poblará dinámicamente
+        label_hint: 'Seleccione el paciente',
+      },
+      { id: 2, name: 'antecedentes_medicos', label: 'Antecedentes Medicos', type: 'text', controlType: 'textarea', validators: [Validators.required, Validators.minLength(3)], min: 3 },
+      { id: 3, name: 'alergias', label: 'Alergias', type: 'text', controlType: 'textarea', validators: [Validators.required, Validators.minLength(3)], min: 3 },
+    ];
+  }
+
+  newRecetaControls(consultas: Array<ConsultaMedica>): FieldConfig[] {
+    var selectionConsulta: Array<SelectOption> = [];
+    consultas.forEach(
+      modelo => selectionConsulta.push({ id: modelo.id, name: modelo.expediente?.paciente?.usuario?.persona?.nombre + ' ' + modelo.cita?.motivo_consulta, value: modelo })
+    );
+    return [
+      {
+        id: 1,
+        label: 'Consulta',
+        type: 'text',
+        controlType: 'select',
+        name: 'consulta',
+        validators: [Validators.required],
+        options: selectionConsulta, // se poblará dinámicamente
+        label_hint: 'Seleccione una consulta',
+      },
+      {
+        id: 2,
+        name: 'fecha_emision', label: 'Fecha de emision',
+        type: 'date', controlType: 'datepicker',
+        validators: [Validators.required]
+      },
+      {
+        id: 3,
+        name: 'indicaciones_generales', label: 'Indicaciones generales',
+        type: 'text', controlType: 'textarea',
+        validators: [Validators.required, Validators.minLength(3)]
+        , min: 3
+      },
+    ];
+  }
+
+  newDetalleRecetaControls(): FieldConfig[] {
+
+    return [
+      {
+        id: 1,
+        name: 'nombre_medicamento', label: 'Nombre Medicamento',
+        type: 'text', controlType: 'input',
+        validators: [Validators.required, Validators.minLength(3)]
+        , min: 3
+      },
+      {
+        id: 2,
+        name: 'dosis', label: 'Dosis',
+        type: 'text', controlType: 'input',
+        validators: [Validators.required, Validators.minLength(3)]
+        , min: 3, label_hint: '50ml / 1 tableta'
+      },
+      {
+        id: 3,
+        name: 'frecuencia', label: 'fecuencia',
+        type: 'text', controlType: 'input',
+        validators: [Validators.required, Validators.minLength(3)]
+        , min: 3, label_hint: '2 veces al dia'
+      },
+      {
+        id: 4,
+        name: 'duracion', label: 'Duracion',
+        type: 'text', controlType: 'input',
+        validators: [Validators.required, Validators.minLength(3)]
+        , min: 3, label_hint: '10 dias'
       },
     ];
   }

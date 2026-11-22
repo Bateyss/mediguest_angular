@@ -25,6 +25,17 @@ export class DataApp {
     static readonly RECETA_ID: string = 'recetaList';
     static readonly DETALLE_RECETA_ID: string = 'detalleRecetaList';
 
+    private static personaList: Persona[] = [];
+    private static usuarioList: Usuario[] = [];
+    private static medicoList: Medico[] = [];
+    private static pacienteList: Paciente[] = [];
+    private static horarioMedicoList: HorarioMedico[] = [];
+    private static citaList: Cita[] = [];
+    private static expedienteList: Expediente[] = [];
+    private static consultaMedicaList: ConsultaMedica[] = [];
+    private static recetaMedicaList: RecetaMedica[] = [];
+    private static detalleRecetaList: DetalleReceta[] = [];
+
     static getPersonaVacio(): Persona {
         return {
             id: 0,
@@ -82,7 +93,7 @@ export class DataApp {
         return {
             id: 0,
             paciente: this.getPacienteVacio(),
-            medico: this.getMedicoVacio(),
+            horario_medico: this.getHorarioVacio(),
             fecha_cita: new Date(),
             hora_cita: 1,
             estado: "programado",
@@ -150,150 +161,191 @@ export class DataApp {
 
     static getPersonaListRandom(): Array<Persona> {
         var datosList: Array<Persona> = [];
-        for (let index = 0; index < Utils.randomInt(10, 1); index++) {
-            datosList.push({
-                id: index,
-                nombre: Utils.randomString(10),
-                apellido: Utils.randomString(10),
-                tipo_documento: Utils.randomSelect(["DUI", "RESIDENTE", "PASAPORTE"]),
-                numero_documento: Utils.randomString(10),
-                numero_telefono: Utils.randomString(10),
-                email: Utils.randomString(10),
-                genero: Utils.randomSelect(["masculino", "femenino", "otros"])
-            });
-        }
+        if (this.personaList.length)
+            datosList = this.personaList
+        else
+            for (let index = 0; index < Utils.randomInt(100, 25); index++) {
+                datosList.push({
+                    id: index + 1,
+                    nombre: 'nom' + Utils.randomString(10),
+                    apellido: 'ape' + Utils.randomString(10),
+                    tipo_documento: Utils.randomSelect(["DUI", "RESIDENTE", "PASAPORTE"]),
+                    numero_documento: 'doc' + Utils.randomString(10),
+                    numero_telefono: 'tel' + Utils.randomString(10),
+                    email: 'emai' + Utils.randomString(10),
+                    genero: Utils.randomSelect(["masculino", "femenino", "otros"])
+                });
+            }
+        this.personaList = datosList;
         return datosList;
     }
 
     static getUsuarioListRandom(): Array<Usuario> {
         var datosList: Array<Usuario> = [];
-        datosList.push(this.getUsuarioAnonimo())
-        for (let index = 0; index < Utils.randomInt(10, 1); index++) {
-            datosList.push({
-                id: index,
-                persona: Utils.randomSelect(this.getPersonaListRandom()),
-                usuario: Utils.randomString(10),
-                password: Utils.randomString(10),
-                rol: Utils.randomSelect(["paciente", "medico", "recepcionista"]),
-                estado: "activo",
-            });
+        if (this.usuarioList.length)
+            datosList = this.usuarioList
+        else {
+            datosList.push(this.getUsuarioAnonimo())
+            for (let index = 0; index < Utils.randomInt(100, 25); index++) {
+                datosList.push({
+                    id: index + 2,
+                    persona: Utils.randomSelect(this.getPersonaListRandom()),
+                    usuario: 'usu' + Utils.randomString(10),
+                    password: 'pass' + Utils.randomString(10),
+                    rol: Utils.randomSelect(["paciente", "medico", "recepcionista"]),
+                    estado: "activo",
+                });
+            }
         }
+        this.usuarioList = datosList;
         return datosList;
     }
 
     static getMedicoListRandom(): Array<Medico> {
         var datosList: Array<Medico> = [];
-        for (let index = 0; index < Utils.randomInt(10, 1); index++) {
-            datosList.push({
-                id: index,
-                usuario: Utils.randomSelect(this.getUsuarioListRandom()),
-                especialidad: Utils.randomString(10),
-                numero_junta_vigilancia: Utils.randomString(10),
-            });
-        }
+        if (this.medicoList.length)
+            datosList = this.medicoList
+        else
+            for (let index = 0; index < Utils.randomInt(100, 25); index++) {
+                datosList.push({
+                    id: index + 1,
+                    usuario: Utils.randomSelect(this.getUsuarioListRandom(), 1),
+                    especialidad: 'esp' + Utils.randomString(10),
+                    numero_junta_vigilancia: 'jun' + Utils.randomString(10),
+                });
+            }
+        this.medicoList = datosList;
         return datosList;
     }
 
     static getPacienteListRandom(): Array<Paciente> {
         var datosList: Array<Paciente> = [];
-        for (let index = 0; index < Utils.randomInt(10, 1); index++) {
-            datosList.push({
-                id: index,
-                usuario: Utils.randomSelect(this.getUsuarioListRandom()),
-                fecha_registro: new Date(),
-                fecha_ultima_visita: new Date(),
-                fecha_nacimiento: new Date(),
-            });
-        }
+        if (this.pacienteList.length)
+            datosList = this.pacienteList
+        else
+            for (let index = 0; index < Utils.randomInt(100, 25); index++) {
+                datosList.push({
+                    id: index + 1,
+                    usuario: Utils.randomSelect(this.getUsuarioListRandom(), 1),
+                    fecha_registro: new Date(),
+                    fecha_ultima_visita: new Date(),
+                    fecha_nacimiento: new Date(),
+                });
+            }
+        this.pacienteList = datosList;
         return datosList;
     }
 
     static getHorarioListRandom(): Array<HorarioMedico> {
         var datosList: Array<HorarioMedico> = [];
-        for (let index = 0; index < Utils.randomInt(10, 1); index++) {
-            datosList.push({
-                id: index,
-                medico: Utils.randomSelect(this.getMedicoListRandom()),
-                dia_semana: Utils.randomInt(7, 1) as 1 | 2 | 3 | 4 | 5 | 6 | 7,
-                hora_inicio: Utils.randomInt(23) as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 0,
-                hora_fin: Utils.randomInt(23) as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 0,
-            });
-        }
+        if (this.horarioMedicoList.length)
+            datosList = this.horarioMedicoList
+        else
+            for (let index = 0; index < Utils.randomInt(100, 25); index++) {
+                datosList.push({
+                    id: index + 1,
+                    medico: Utils.randomSelect(this.getMedicoListRandom()),
+                    dia_semana: Utils.randomInt(7, 1) as 1 | 2 | 3 | 4 | 5 | 6 | 7,
+                    hora_inicio: Utils.randomInt(23) as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 0,
+                    hora_fin: Utils.randomInt(23) as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 0,
+                });
+            }
+        this.horarioMedicoList = datosList;
         return datosList;
     }
 
     static getCitaListRandom(): Array<Cita> {
         var datosList: Array<Cita> = [];
-        for (let index = 0; index < Utils.randomInt(10, 1); index++) {
-            datosList.push({
-                id: index,
-                paciente: Utils.randomSelect(this.getPacienteListRandom()),
-                medico: Utils.randomSelect(this.getMedicoListRandom()),
-                fecha_cita: new Date(),
-                hora_cita: Utils.randomInt(23) as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 0,
-                estado: "programado",
-                motivo_consulta: Utils.randomString(10),
-                fecha_creacion: new Date(),
-            });
-        }
+        if (this.citaList.length)
+            datosList = this.citaList
+        else
+            for (let index = 0; index < Utils.randomInt(100, 25); index++) {
+                datosList.push({
+                    id: index + 1,
+                    paciente: Utils.randomSelect(this.getPacienteListRandom()),
+                    horario_medico: Utils.randomSelect(this.getHorarioListRandom()),
+                    fecha_cita: new Date(),
+                    hora_cita: Utils.randomInt(23) as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 0,
+                    estado: "programado",
+                    motivo_consulta: 'mot' + Utils.randomString(10),
+                    fecha_creacion: new Date(),
+                });
+            }
+        this.citaList = datosList;
         return datosList;
     }
 
     static getExpedienteListRandom(): Array<Expediente> {
         var datosList: Array<Expediente> = [];
-        for (let index = 0; index < Utils.randomInt(10, 1); index++) {
-            datosList.push({
-                id: index,
-                paciente: Utils.randomSelect(this.getPacienteListRandom()),
-                fecha_apertura: new Date(),
-                antecedentes_medicos: Utils.randomString(10),
-                alergias: Utils.randomString(10),
-            });
-        }
+        if (this.expedienteList.length)
+            datosList = this.expedienteList
+        else
+            for (let index = 0; index < Utils.randomInt(100, 25); index++) {
+                datosList.push({
+                    id: index + 1,
+                    paciente: Utils.randomSelect(this.getPacienteListRandom()),
+                    fecha_apertura: new Date(),
+                    antecedentes_medicos: 'ant' + Utils.randomString(10),
+                    alergias: 'ale' + Utils.randomString(10),
+                });
+            }
+        this.expedienteList = datosList;
         return datosList;
     }
 
     static getConsultaListRandom(): Array<ConsultaMedica> {
         var datosList: Array<ConsultaMedica> = [];
-        for (let index = 0; index < Utils.randomInt(10, 1); index++) {
-            datosList.push({
-                id: index,
-                expediente: Utils.randomSelect(this.getExpedienteListRandom()),
-                cita: Utils.randomSelect(this.getCitaListRandom()),
-                medico: Utils.randomSelect(this.getMedicoListRandom()),
-                fecha_atencion: new Date(),
-                diagnostico: Utils.randomString(10),
-                nota_evolucion: Utils.randomString(10),
-            });
-        }
+        if (this.consultaMedicaList.length)
+            datosList = this.consultaMedicaList
+        else
+            for (let index = 0; index < Utils.randomInt(100, 25); index++) {
+                datosList.push({
+                    id: index + 1,
+                    expediente: Utils.randomSelect(this.getExpedienteListRandom()),
+                    cita: Utils.randomSelect(this.getCitaListRandom()),
+                    medico: Utils.randomSelect(this.getMedicoListRandom()),
+                    fecha_atencion: new Date(),
+                    diagnostico: 'diag' + Utils.randomString(10),
+                    nota_evolucion: 'nota' + Utils.randomString(10),
+                });
+            }
+        this.consultaMedicaList = datosList;
         return datosList;
     }
 
     static getRecetaListRandom(): Array<RecetaMedica> {
         var datosList: Array<RecetaMedica> = [];
-        for (let index = 0; index < Utils.randomInt(10, 1); index++) {
-            datosList.push({
-                id: index,
-                consulta: Utils.randomSelect(this.getConsultaListRandom()),
-                fecha_emision: new Date(),
-                indicaciones_generales: Utils.randomString(10),
-            });
-        }
+        if (this.recetaMedicaList.length)
+            datosList = this.recetaMedicaList
+        else
+            for (let index = 0; index < Utils.randomInt(100, 25); index++) {
+                datosList.push({
+                    id: index + 1,
+                    consulta: Utils.randomSelect(this.getConsultaListRandom()),
+                    fecha_emision: new Date(),
+                    indicaciones_generales: 'ind' + Utils.randomString(10),
+                });
+            }
+        this.recetaMedicaList = datosList;
         return datosList;
     }
 
     static getDetalleRecetaListRandom(): Array<DetalleReceta> {
         var datosList: Array<DetalleReceta> = [];
-        for (let index = 0; index < Utils.randomInt(10, 1); index++) {
-            datosList.push({
-                id: index,
-                receta: Utils.randomSelect(this.getRecetaListRandom()),
-                nombre_medicamento: Utils.randomString(10),
-                dosis: Utils.randomString(10),
-                frecuencia: Utils.randomString(10),
-                duracion: Utils.randomString(10),
-            });
-        }
+        if (this.detalleRecetaList.length)
+            datosList = this.detalleRecetaList
+        else
+            for (let index = 0; index < Utils.randomInt(100, 25); index++) {
+                datosList.push({
+                    id: index + 1,
+                    receta: Utils.randomSelect(this.getRecetaListRandom()),
+                    nombre_medicamento: 'medi' + Utils.randomString(10),
+                    dosis: 'dosis' + Utils.randomString(10),
+                    frecuencia: 'frec' + Utils.randomString(10),
+                    duracion: 'dur' + Utils.randomString(10),
+                });
+            }
+        this.detalleRecetaList = datosList;
         return datosList;
     }
 

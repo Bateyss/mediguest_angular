@@ -45,18 +45,20 @@ export class Utils {
     static randomString(length: number) {
         var chars = ' 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_- ';
         var result = '';
-        for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * (chars.length - 1)) | 0];
+        var index = this.randomInt(chars.length - 1)
+        for (var i = length; i > 0; --i) result += chars[index];
         return result;
     }
 
-    static randomSelect<Modelo>(array: Array<Modelo>): Modelo {
-        var result = array[Math.floor(Math.random() * array.length) | 0];
+    static randomSelect<Modelo>(array: Array<Modelo>, min: number = 0): Modelo {
+        var index = this.randomInt(array.length - 1, min)
+        var result = array[index];
         return result;
     }
 
     static randomInt(max: number, min: number = 0): number {
         var result = 0;
-        result = Math.floor(Math.random() * max);
+        result = Math.floor(Math.random() * max) | 0;
         if (result < min) result = min;
         return result;
     }

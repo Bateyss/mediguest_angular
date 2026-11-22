@@ -10,8 +10,8 @@ export abstract class AbstractService<Entity extends EntityModel> {
     private list: Array<Entity> = [];
 
     constructor(
-        public localStorageService: LocalStorageService,
-        public storageID: string
+        protected localStorageService: LocalStorageService,
+        protected storageID: string
     ) {
     }
 
@@ -29,12 +29,13 @@ export abstract class AbstractService<Entity extends EntityModel> {
             responseList = this.getRandomData();
             this.localStorageService.setItem(this.storageID, responseList);
         }
-
         return responseList;
     }
     pushEntity(datos: Entity): Entity {
         var entityList: Array<Entity> = this.getEntityList();
-        datos.id = entityList[entityList.length - 1].id + 1;
+        if (entityList && entityList.length)
+            datos.id = entityList[entityList.length - 1].id + 1;
+        else datos.id = 1;
         entityList.push(datos);
         this.localStorageService.setItem(this.storageID, entityList);
         return datos;
@@ -52,6 +53,18 @@ export abstract class AbstractService<Entity extends EntityModel> {
         });
         this.localStorageService.setItem(this.storageID, entityListNueva);
         return datos;
+    }
+
+    deleteEntity(datosId: number) {
+        var entityList: Array<Entity> = this.getEntityList();
+        var entityListNueva: Array<Entity> = [];
+        entityList.forEach(arrData => {
+            var newData: Entity = arrData;
+            if (newData.id != datosId) {
+                entityListNueva.push(newData);
+            }
+        });
+        this.localStorageService.setItem(this.storageID, entityListNueva);
     }
 }
 
