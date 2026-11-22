@@ -7,12 +7,22 @@ import { Menu } from '../../models/util/menu';
 import { LocalStorageService } from '../../service/core/local-storage-service';
 import { ThemeService } from '../../service/util/theme-service';
 import { DataApp } from '../../util/data-app';
+import { IMAGE_LOADER, ImageLoaderConfig, NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-inicio',
-  imports: [MaterialToolbarModule, RouterOutlet, MatDividerModule, RouterLink, RouterLinkActive, MatButtonModule],
+  imports: [NgOptimizedImage, MaterialToolbarModule, RouterOutlet, MatDividerModule, RouterLink, RouterLinkActive, MatButtonModule],
   templateUrl: './inicio.html',
-  styleUrl: './inicio.css'
+  styleUrl: './inicio.css',
+  providers: [
+    {
+      provide: IMAGE_LOADER,
+      useValue: (config: ImageLoaderConfig) => {
+        // Example: turns "avatar" + width 400 into "avatar_400.png"
+        return `${config.src}`;
+      },
+    },
+  ]
 })
 export class Inicio implements OnInit {
 
@@ -40,6 +50,10 @@ export class Inicio implements OnInit {
     nuevosMenus.push({ id: 2, ruta: '/menu/pacientes', nombre: 'Pacientes' });
     nuevosMenus.push({ id: 3, ruta: '/menu/horarios', nombre: 'Horarios' });
     nuevosMenus.push({ id: 4, ruta: '/menu/citas', nombre: 'Citas' });
+    nuevosMenus.push({ id: 5, ruta: '/menu/agenda', nombre: 'Agenda' });
+    nuevosMenus.push({ id: 6, ruta: '/menu/expediente', nombre: 'Expedientes' });
+    nuevosMenus.push({ id: 7, ruta: '/menu/consulta', nombre: 'Consultas' });
+    nuevosMenus.push({ id: 8, ruta: '/menu/receta', nombre: 'Recetas' });
     this.menusList.update(valores => [...nuevosMenus]);
   }
 

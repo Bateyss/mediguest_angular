@@ -8,7 +8,10 @@
         }
     </button>
     <span [style.marginLeft]="'1em'"></span>
-    <span><img (click)="homeClick()" [style.height]="'100%'" [style.maxHeight]="'2em'" src="logo.png"></span>
+    <span>
+        <img (click)="homeClick()" ngSrc="logo_mini.png" ngSrcset="100w, 100w" width="50" height="50" />
+        <!-- <img (click)="homeClick()" [style.height]="'100%'" [style.maxHeight]="'2em'" src="logo.png"> -->
+    </span>
     <span [style.marginLeft]="'1em'"></span>
 </mat-toolbar>
 
