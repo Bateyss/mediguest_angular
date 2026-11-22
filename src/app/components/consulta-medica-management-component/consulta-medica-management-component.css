@@ -1,0 +1,21 @@
+:host {
+    display: block;
+    padding: 1rem;
+    background: #f9f9f9;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.search-section {
+    margin-bottom: 0.5rem;
+}
+
+.form-actions {
+    margin-bottom: 1rem;
+}
+
+.spinner-small {
+    margin-right: 0.5rem;
+}

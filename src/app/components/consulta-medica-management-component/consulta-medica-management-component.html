@@ -1,0 +1,92 @@
+<h2 class="mat-headline-medium">Gestión de Consultas Médicas</h2>
+
+<div [style.width]="'50%'">
+    <!-- Formulario para filtro de busqueda -->
+    @if (searchForm && loading() === false) {
+    <app-shared-form [form]="searchForm" [formConfigs]="searchFormConfigs()" (formSubmit)="applyFilter()"
+        [botonText]="'Buscar'"></app-shared-form>
+    }
+</div>
+
+
+<button mat-button color="accent" (click)="resetSearch()" [disabled]="loading()">
+    Limpiar
+</button>
+
+<div [style.width]="'50%'">
+    <!-- Formulario para crear/editar consulta -->
+    @if (searchForm && loading() === false) {
+    <app-shared-form [form]="form" [formConfigs]="formConfigs()" (formSubmit)="onSubmit()"></app-shared-form>
+    }
+</div>
+
+
+
+@if (loading()) {
+<mat-progress-spinner class="spinner-small" diameter="32" mode="indeterminate"></mat-progress-spinner>
+}
+@if (!loading()) {
+<table mat-table [dataSource]="filteredConsultas()" class="mat-elevation-z2">
+    <ng-container matColumnDef="edit">
+        <th mat-header-cell *matHeaderCellDef>Editar</th>
+        <td mat-cell *matCellDef="let c">
+            <button mat-icon-button color="primary" (click)="edit(c)">
+                <mat-icon>edit</mat-icon>
+            </button>
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="delete">
+        <th mat-header-cell *matHeaderCellDef>Eliminar</th>
+        <td mat-cell *matCellDef="let c">
+            <button mat-icon-button color="warn" (click)="delete(c.id)">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="expediente">
+        <th mat-header-cell *matHeaderCellDef>Expediente</th>
+        <td mat-cell *matCellDef="let c">
+            {{ c.expediente.id }}
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="paciente">
+        <th mat-header-cell *matHeaderCellDef>Paciente</th>
+        <td mat-cell *matCellDef="let c">
+            {{ c.expediente?.paciente?.usuario?.persona?.nombre }} {{ c.expediente?.paciente?.usuario?.persona?.apellido }}
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="fecha">
+        <th mat-header-cell *matHeaderCellDef>Fecha</th>
+        <td mat-cell *matCellDef="let c">
+            {{ c.fecha_atencion | date }}
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="hora">
+        <th mat-header-cell *matHeaderCellDef>Hora</th>
+        <td mat-cell *matCellDef="let c">
+            {{ c.cita.fecha_cita | hourPipe }}
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="motivo">
+        <th mat-header-cell *matHeaderCellDef>Motivo</th>
+        <td mat-cell *matCellDef="let c">
+            {{ c.cita.motivo_consulta }}
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>
+}
+
+@if (!loading && filteredConsultas().length === 0) {
+<div style="margin-top: 1rem;">
+    <mat-icon>info</mat-icon> No se encontraron consultas médicas.
+</div>
+}
