@@ -1,0 +1,24 @@
+/* src/app/components/expediente-form/expediente-form.component.css */
+.expediente-card {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.filter-field {
+    margin-bottom: 1rem;
+}
+
+.actions button {
+    margin-right: 8px;
+}
+
+
+.full-width {
+    width: 100%;
+}
+
+.buttons {
+    flex-direction: column;
+    align-items: stretch;
+}
