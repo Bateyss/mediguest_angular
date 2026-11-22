@@ -11,10 +11,11 @@ import { FormService } from '../../service/util/form-service';
 import { DataApp } from '../../util/data-app';
 import { FormErrorStateMatcher } from '../../util/form-error-state-matcher';
 import { Utils } from '../../util/utils';
+import { SharedForm } from '../util/shared-form/shared-form';
 
 @Component({
   selector: 'app-signin',
-  imports: [MaterialFormDialogModule],
+  imports: [MaterialFormDialogModule, SharedForm],
   templateUrl: './signin.html',
   styleUrl: './signin.css',
 })
@@ -38,12 +39,10 @@ export class Signin implements OnInit {
   public formConfigs = signal<FieldConfig[]>([]);
   public matcher = new FormErrorStateMatcher();
 
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data: {}) {
-    this.innerWidths = (this.document.body.clientWidth * 0.9) + 'px';
-  }
+  data = inject<{}>(MAT_DIALOG_DATA);
 
   ngOnInit() {
+    this.innerWidths = (this.document.body.clientWidth * 0.9) + 'px';
     // seteando formulario de pantalla
     var newConfig = this.formService.newSignInControls();
     this.formConfigs.update(() => [...newConfig]);
@@ -52,10 +51,6 @@ export class Signin implements OnInit {
 
   getFormControl(control: string) {
     return this.signinForm.get(control);
-  }
-
-  compareIds(id1: any, id2: any): boolean {
-    return id1.id == id2.id;
   }
 
   validarDatos(): boolean {

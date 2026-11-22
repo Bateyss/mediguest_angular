@@ -1,88 +1,9 @@
 <mat-dialog-content>
     <div>
-        <mat-card>
-            <mat-card-title>
-                <label class="h4">Formulario</label>
-            </mat-card-title>
-            <mat-card-content>
-                <form id="productoForm" [formGroup]="signinForm" (ngSubmit)="guardarUsuario()">
-                    <mat-grid-list cols="1">
-
-                        @for (formfield of formConfigs(); track formfield) {
-                        <mat-card-title>
-                            @switch (formfield.controlType) {
-                            @case ('textarea') {
-                            <mat-form-field>
-                                <mat-label>{{formfield.label}}</mat-label>
-                                <textarea matInput [formControlName]="formfield.name"
-                                    [errorStateMatcher]="matcher"></textarea>
-                                @if (getFormControl(formfield.name)?.errors) {
-                                <mat-hint align="start">Ingrese{{' '+formfield.label}}</mat-hint>
-                                }
-                                @if (formfield.max || formfield.min) {
-                                <mat-hint align="end">{{formfield.min && formfield.min > 0 ? formfield.min :
-                                    '-'}}/{{getFormControl(formfield.name)?.value.length}}/{{formfield.max &&
-                                    formfield.max > 0
-                                    ? formfield.max : '-'}}</mat-hint>
-                                }
-                            </mat-form-field>
-                            }
-                            @case ('select') {
-                            <mat-form-field>
-                                <mat-label>{{formfield.label}}</mat-label>
-                                <mat-select [compareWith]="compareIds" required [formControlName]="formfield.name"
-                                    [errorStateMatcher]="matcher">
-                                    @for (opcion of formfield.options; track opcion) {
-                                    <mat-option [value]="opcion.value">{{opcion.name}}</mat-option>
-                                    }
-                                </mat-select>
-                                @if (getFormControl(formfield.name)?.errors) {
-                                <mat-hint align="start">Seleccione{{' '+formfield.label}}</mat-hint>
-                                }
-                            </mat-form-field>
-                            }
-                            @case ('datepicker') {
-                            <mat-form-field>
-                                <mat-label>{{formfield.label}}</mat-label>
-                                <input matInput #input [formControlName]="formfield.name" [matDatepicker]="picker"
-                                    [errorStateMatcher]="matcher" required />
-                                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                                <mat-datepicker #picker startView="year"></mat-datepicker>
-                                @if (getFormControl(formfield.name)?.errors) {
-                                <mat-hint align="start">Ingrese{{' '+formfield.label}}</mat-hint>
-                                }
-                            </mat-form-field>
-                            }
-                            @default {
-                            <mat-form-field>
-                                <mat-label>{{formfield.label}}</mat-label>
-                                <input matInput #input [type]="formfield.type" [formControlName]="formfield.name"
-                                    maxlength="{{formfield.max && formfield.max > 0 && formfield.type == 'text' ? formfield.max : 1000}}"
-                                    max="{{formfield.max && formfield.max > 0 && formfield.type == 'number' ? formfield.max : 1000000}}"
-                                    [errorStateMatcher]="matcher" required />
-                                @if (getFormControl(formfield.name)?.errors) {
-                                <mat-hint align="start">Ingrese{{' '+formfield.label}}</mat-hint>
-                                }
-                                @if (formfield.max || formfield.min) {
-                                <mat-hint align="end">{{formfield.min && formfield.min > 0 ? formfield.min :
-                                    '-'}}/{{formfield.type == 'number'?
-                                    getFormControl(formfield.name)?.value:
-                                    getFormControl(formfield.name)?.value.length}}/{{formfield.max && formfield.max > 0
-                                    ? formfield.max : '-'}}</mat-hint>
-                                }
-                            </mat-form-field>
-                            }
-                            }
-                        </mat-card-title>
-                        }
-
-                        <mat-card-title>
-                            <button mat-stroked-button color="primary" type="submit">Agregar</button>
-                        </mat-card-title>
-
-                    </mat-grid-list>
-                </form>
-            </mat-card-content>
-        </mat-card>
+        <!-- Formulario para crear/editar usuario -->
+        @if (signinForm && formConfigs().length) {
+        <app-shared-form [form]="signinForm" [formConfigs]="formConfigs()"
+            (formSubmit)="guardarUsuario()"></app-shared-form>
+        }
     </div>
 </mat-dialog-content>

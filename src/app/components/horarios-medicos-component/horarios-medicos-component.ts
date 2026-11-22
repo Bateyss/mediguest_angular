@@ -10,6 +10,7 @@ import { FormService } from '../../service/util/form-service';
 import { DataApp } from '../../util/data-app';
 import { FormErrorStateMatcher } from '../../util/form-error-state-matcher';
 import { Utils } from '../../util/utils';
+import { SharedForm } from '../util/shared-form/shared-form';
 
 @Component({
   selector: 'app-horarios-medicos-component',
@@ -17,7 +18,8 @@ import { Utils } from '../../util/utils';
     MaterialFormModule,
     FormsModule,
     MaterialTableModelModule,
-    MaterialFormDialogModule
+    MaterialFormDialogModule,
+    SharedForm
   ],
   templateUrl: './horarios-medicos-component.html',
   styleUrl: './horarios-medicos-component.css',
@@ -27,7 +29,7 @@ export class HorariosMedicosComponent implements OnInit {
   private formService = inject(FormService);
   private medicoService = inject(MedicoService);
 
-  displayedColumns = ['nombre','apellido','dia_semana', 'hora_inicio', 'hora_fin', 'acciones'];
+  displayedColumns = ['nombre', 'apellido', 'dia_semana', 'hora_inicio', 'hora_fin', 'acciones'];
   weekDays = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
   schedules = signal<HorarioMedico[]>([]);
 
@@ -67,14 +69,11 @@ export class HorariosMedicosComponent implements OnInit {
     return this.scheduleForm.get(control);
   }
 
-  compareIds(id1: any, id2: any): boolean {
-    return id1.id == id2.id;
-  }
 
   validarDatos(): boolean {
     var valido = this.formService.validateFormControls(this.scheduleForm);
     const f = this.scheduleForm.value;
-    if (f.hora_inicio > f.hora_fin) alert('Datos inválidos: verifica día, hora inicio < hora fin');
+    if (f.hora_inicio >= f.hora_fin) Utils.openSnackBar('Datos inválidos: verifica día, hora inicio < hora fin', 'aceptar', this._snackBar);
     valido = f.hora_inicio < f.hora_fin;
     return valido;
   }

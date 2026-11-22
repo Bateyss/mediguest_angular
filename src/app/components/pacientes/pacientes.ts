@@ -12,6 +12,7 @@ import { FormService } from '../../service/util/form-service';
 import { DataApp } from '../../util/data-app';
 import { FormErrorStateMatcher } from '../../util/form-error-state-matcher';
 import { Utils } from '../../util/utils';
+import { SharedForm } from '../util/shared-form/shared-form';
 
 @Component({
   selector: 'app-pacientes',
@@ -47,7 +48,7 @@ export class Pacientes implements OnInit {
   editarPaciente(paciente: Paciente) {
     const dialogConfig = Utils.getMatDialogConf()
     dialogConfig.data = {
-      paciente: DataApp.getPacienteVacio()
+      paciente: paciente
     };
     const dialogRef = this.dialog.open(CrearPaciente, dialogConfig);
     dialogRef.afterClosed().subscribe(
@@ -59,7 +60,7 @@ export class Pacientes implements OnInit {
 
 @Component({
   selector: 'app-pacientes-crear',
-  imports: [MaterialFormDialogModule],
+  imports: [MaterialFormDialogModule, SharedForm],
   templateUrl: './pacientes_crear.html',
   styleUrl: './pacientes.css',
   providers: [provideNativeDateAdapter(),
@@ -85,15 +86,11 @@ export class CrearPaciente implements OnInit {
   public formConfigs = signal<FieldConfig[]>([]);
   public matcher = new FormErrorStateMatcher();
 
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data: {
-      paciente: Paciente
-    }) {
-    this.innerWidths = (this.document.body.clientWidth * 0.9) + 'px';
-    this.pacienteSeleccionado = data.paciente;
-  }
+  data = inject<{ paciente: Paciente | null }>(MAT_DIALOG_DATA);
 
   ngOnInit() {
+    this.innerWidths = (this.document.body.clientWidth * 0.9) + 'px';
+    this.pacienteSeleccionado = this.data.paciente ? this.data.paciente : this.pacienteSeleccionado;
     var usuarios = this.usuarioService.getEntityList();
     // seteando formulario de pantalla
     var newConfig = this.formService.newPacienteControls(usuarios);
@@ -106,21 +103,20 @@ export class CrearPaciente implements OnInit {
     return this.pacienteForm.get(control);
   }
 
-  compareIds(id1: any, id2: any): boolean {
-    return id1.id == id2.id;
-  }
-
   validarDatos(): boolean {
     var valido = this.formService.validateFormControls(this.pacienteForm);
+    var usuario = this.getFormControl("usuario")?.value;
+    if (usuario.id < 2) {
+      Utils.openSnackBar('Seleccione una persona correctamente', 'ok', this._snackBar);
+      valido = false;
+    }
     return valido;
   }
 
   guardarPaciente() {
     if (this.validarDatos()) {
-
       this.pacienteSeleccionado.usuario = this.getFormControl("usuario")?.value;
       this.pacienteSeleccionado.fecha_nacimiento = new Date(this.getFormControl("fecha_nacimiento")?.value);
-
       if (this.pacienteSeleccionado.id) {
         this.pacienteService.updateEntity(this.pacienteSeleccionado);
       } else {
