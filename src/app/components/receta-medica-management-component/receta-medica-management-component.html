@@ -1,0 +1,118 @@
+<div class="receta-management">
+    <h2>Gestión de Recetas Médicas</h2>
+
+    <mat-form-field appearance="fill" class="search-box">
+        <mat-label>Buscar por consulta o paciente</mat-label>
+        <mat-select [compareWith]="compareIds" required [value]="filtro()">
+            @for (opcion of pacientes(); track opcion) {
+            <mat-option [value]="opcion.id">
+                {{opcion.usuario.persona.nombre}} {{opcion.usuario.persona.apellido}}
+            </mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
+
+    <div class="action-buttons">
+        <button mat-raised-button color="primary" (click)="applyFilter()">Filtrar</button>
+    </div>
+
+    <div class="action-buttons">
+        <button mat-raised-button color="primary" (click)="resetFilter()">Limpiar Filtro</button>
+    </div>
+
+    <!-- <div class="action-buttons">
+        <button mat-raised-button color="primary" (click)="onCreate()">Crear receta</button>
+    </div> -->
+
+    <table mat-table [dataSource]="filteredRecetas()" class="mat-elevation-z2">
+
+        <!-- Columna: Editar -->
+        <ng-container matColumnDef="edit">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let rec">
+                <button mat-icon-button color="accent" (click)="onEdit(rec)">
+                    <mat-icon>edit</mat-icon>
+                </button>
+            </td>
+        </ng-container>
+
+        <!-- Columna: Consulta (paciente) -->
+        <ng-container matColumnDef="consulta">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let rec">{{ rec.consulta?.paciente?.nombre }} {{ rec.consulta?.paciente?.apellido
+                }}</td>
+        </ng-container>
+
+        <!-- Columna: Fecha -->
+        <ng-container matColumnDef="fecha">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let rec">{{ rec.fecha_emision | date:'short' }}</td>
+        </ng-container>
+
+        <!-- Columna: Indicaciones -->
+        <ng-container matColumnDef="indicaciones">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let rec">{{ rec.indicaciones_generales }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns()"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns()"></tr>
+
+    </table>
+
+    <!-- Mensaje cuando no hay resultados -->
+    @if (filteredRecetas().length === 0 && !loading()) {
+    <div style="margin-top: 1rem;">
+        <mat-icon>info</mat-icon> No se encontraron recetas.
+    </div>
+    }
+
+    <!-- Formulario para crear/editar receta -->
+    @if (form && loading() === false) {
+    <app-shared-form [form]="form" [formConfigs]="formConfig()" (formSubmit)="onCreate()"></app-shared-form>
+    }
+
+    <!-- Formulario para crear/editar detalle receta -->
+    @if (formDetalle && loading() === false) {
+    <app-shared-form [form]="formDetalle" [formConfigs]="formConfigDetalle()"
+        (formSubmit)="guardarDetalle()"></app-shared-form>
+    }
+
+    <table mat-table [dataSource]="detallesReceta()" class="mat-elevation-z2">
+
+        <!-- Columna: nombre_medicamento -->
+        <ng-container matColumnDef="nombre_medicamento">
+            <th mat-header-cell *matHeaderCellDef>Nombre de medicamento</th>
+            <td mat-cell *matCellDef="let rec">{{ rec.nombre_medicamento }} </td>
+        </ng-container>
+
+        <!-- Columna: nombre_medicamento -->
+        <ng-container matColumnDef="dosis">
+            <th mat-header-cell *matHeaderCellDef>Dosis</th>
+            <td mat-cell *matCellDef="let rec">{{ rec.dosis }} </td>
+        </ng-container>
+
+        <!-- Columna: nombre_medicamento -->
+        <ng-container matColumnDef="frecuencia">
+            <th mat-header-cell *matHeaderCellDef>Frecuencia</th>
+            <td mat-cell *matCellDef="let rec">{{ rec.frecuencia }} </td>
+        </ng-container>
+
+        <!-- Columna: nombre_medicamento -->
+        <ng-container matColumnDef="duracion">
+            <th mat-header-cell *matHeaderCellDef>Duracion</th>
+            <td mat-cell *matCellDef="let rec">{{ rec.duracion }} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsDetalle()"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsDetalle()"></tr>
+
+    </table>
+
+    @if (detallesReceta().length === 0 && !loading()) {
+    <div style="margin-top: 1rem;">
+        <mat-icon>info</mat-icon> No se encontraron detalles de receta.
+    </div>
+    }
+
+</div>
