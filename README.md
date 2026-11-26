@@ -2,6 +2,10 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.13.
 
+# Open Git Hub Pages static proto page
+
+[MediGest Angular App](https://bateyss.github.io/mediguest_angular)
+
 # Install & Configure Angular static deploy in a ssr project
 
 ### Configure build in angular.json into configurations
@@ -47,18 +51,28 @@ Next configure package.json add into scripts:
 ## Way 1: angular deploy (github auto configured)
 
 ```bash
-npm deploy-ng-gh-pages
+npm run deploy-ng-gh-pages
 ```
 
 ## Way 2: npm deploy with angular-cli-ghpages lib
 
 ```bash
-npm deploy-page
+npm run deploy-page
 ```
 
 the previous configuration, deploy this angular project as github static page in:
 
 [mediguest_angular](https://bateyss.github.io/mediguest_angular/)
+
+# repo/project/code settings
+
+## Start angular project
+
+npm add package libs to source folder:
+
+```bash
+npm install
+```
 
 ## Development server
 
