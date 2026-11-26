@@ -16,6 +16,7 @@ Disable srr with SSR=false
     "github-pages": {
         "baseHref": "https://bateyss.github.io/mediguest_angular/",
         "outputMode": "static",
+        "server": false,
         "ssr": false
     }
 ```
