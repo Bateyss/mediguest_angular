@@ -2,6 +2,64 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.13.
 
+# Install & Configure Angular static deploy in a ssr project
+
+### Configure build in angular.json into configurations
+
+baseHref=url where project page will deploy, changes the index context
+
+OutputMode=static as static index.html page
+
+Disable srr with SSR=false
+
+```json
+    "github-pages": {
+        "baseHref": "https://bateyss.github.io/mediguest_angular/",
+        "outputMode": "static",
+        "server": false,
+        "ssr": false
+    }
+```
+[See angular.json](/angular.json#L59)
+
+Add configuration for ng deploy in architect
+
+```json
+    "deploy": {
+        "builder": "angular-cli-ghpages:deploy"
+    }
+```
+[See angular.json](/angular.json#L82)
+
+Next configure package.json add into scripts:
+
+```json
+{
+    "deploy-page": "ng build --configuration github-pages && npx angular-cli-ghpages --dir=dist/mediguest_angular/browser",
+    "deploy-ng-gh-pages": "ng deploy --repo=https://github.com/Bateyss/mediguest_angular.git --name=\"bateyss\" --base-href= mediguest_angular/"
+}
+```
+
+[See package.json](/package.json#L10)
+
+### Now have 2 way to deploy the page in github pages with the bash
+
+## Way 1: angular deploy (github auto configured)
+
+```bash
+npm deploy-ng-gh-pages
+```
+
+## Way 2: npm deploy with angular-cli-ghpages lib
+
+```bash
+npm deploy-page
+```
+
+the previous configuration, deploy this angular project as github static page in:
+
+[mediguest_angular](https://bateyss.github.io/mediguest_angular/)
+
 ## Development server
 
 To start a local development server, run:

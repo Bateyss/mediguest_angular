@@ -1,0 +1,9 @@
+<mat-dialog-content>
+    <div>
+        <!-- Formulario para crear/editar usuario -->
+        @if (signinForm && formConfigs().length) {
+        <app-shared-form [form]="signinForm" [formConfigs]="formConfigs()"
+            (formSubmit)="guardarUsuario()"></app-shared-form>
+        }
+    </div>
+</mat-dialog-content>

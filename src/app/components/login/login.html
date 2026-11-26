@@ -1,0 +1,50 @@
+<mat-expansion-panel hideToggle expanded="true" class="login-container">
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+            Iniciar Sesión
+        </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-card>
+        <mat-card-title>
+            @if (mensajeLogin && mensajeLogin != '') {
+            <label class="h4">{{mensajeLogin}}</label>
+            }
+        </mat-card-title>
+        <mat-card-content>
+            <form id="loginForm" [formGroup]="loginForm" (ngSubmit)="login()">
+                <mat-grid-list cols="1">
+                    <mat-card-title>
+                        <mat-form-field>
+                            <mat-label>Usuario</mat-label>
+                            <input matInput required formControlName="username" [errorStateMatcher]="matcher" />
+                            @if (loginF('username')?.errors) {
+                            <mat-error>Ingrese Usuario</mat-error>
+                            }
+                        </mat-form-field>
+                    </mat-card-title>
+                    <mat-card-title>
+                        <mat-form-field>
+                            <mat-label>Contraseña</mat-label>
+                            <input matInput required formControlName="password" [errorStateMatcher]="matcher"
+                                type="password" />
+                            @if (loginF('password')?.errors) {
+                            <mat-error>Ingrese Contraseña</mat-error>
+                            }
+                        </mat-form-field>
+                    </mat-card-title>
+                    <mat-card-title>
+                        <button mat-stroked-button color="primary" type="submit">Ingresar</button>
+                    </mat-card-title>
+                </mat-grid-list>
+            </form>
+        </mat-card-content>
+    </mat-card>
+    <mat-action-row>
+        <div>
+            <button matButton (click)="iniciarInvitado()">Continuar como invitado</button>
+        </div>
+        <div>
+            <button matButton (click)="crearUsuario()">Registrar Usuario</button>
+        </div>
+    </mat-action-row>
+</mat-expansion-panel>

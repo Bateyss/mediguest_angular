@@ -1,0 +1,43 @@
+<h2>Horarios Médicos</h2>
+
+<div class="schedule-form">
+    <!-- Formulario para crear/editar horarios -->
+    @if (scheduleForm && formConfigs().length) {
+    <app-shared-form [form]="scheduleForm" [formConfigs]="formConfigs()" (formSubmit)="addSchedule()"></app-shared-form>
+    }
+</div>
+
+<table mat-table [dataSource]="schedules()" class="mat-elevation-z8">
+    <ng-container matColumnDef="nombre">
+        <th mat-header-cell *matHeaderCellDef [style.textAlign]="'center'">Nombre</th>
+        <td mat-cell *matCellDef="let element" [style.textAlign]="'center'"> {{element.medico.usuario.persona.nombre}}
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="apellido">
+        <th mat-header-cell *matHeaderCellDef [style.textAlign]="'center'">Apellido</th>
+        <td mat-cell *matCellDef="let element" [style.textAlign]="'center'">
+            {{element.medico.usuario.persona.apellido}}</td>
+    </ng-container>
+    <ng-container matColumnDef="dia_semana">
+        <th mat-header-cell *matHeaderCellDef>Día</th>
+        <td mat-cell *matCellDef="let s">{{ weekDays[s.dia_semana - 1] }}</td>
+    </ng-container>
+    <ng-container matColumnDef="hora_inicio">
+        <th mat-header-cell *matHeaderCellDef>Hora Inicio</th>
+        <td mat-cell *matCellDef="let s">{{ s.hora_inicio }}:00</td>
+    </ng-container>
+    <ng-container matColumnDef="hora_fin">
+        <th mat-header-cell *matHeaderCellDef>Hora Fin</th>
+        <td mat-cell *matCellDef="let s">{{ s.hora_fin }}:00</td>
+    </ng-container>
+    <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+        <td mat-cell *matCellDef="let s">
+            <button mat-icon-button (click)="openForm(s)"><mat-icon>edit</mat-icon></button>
+            <button mat-icon-button color="warn" (click)="deleteSchedule(s)"><mat-icon>delete</mat-icon></button>
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>

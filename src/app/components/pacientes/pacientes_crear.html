@@ -1,0 +1,9 @@
+<mat-dialog-content>
+    <div>
+        <!-- Formulario para crear/editar paciente -->
+        @if (pacienteForm && formConfigs().length) {
+        <app-shared-form [form]="pacienteForm" [formConfigs]="formConfigs()"
+            (formSubmit)="guardarPaciente()"></app-shared-form>
+        }
+    </div>
+</mat-dialog-content>

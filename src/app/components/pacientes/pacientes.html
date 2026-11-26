@@ -1,0 +1,56 @@
+<mat-accordion multi>
+    <mat-expansion-panel hideToggle expanded="true">
+        <mat-expansion-panel-header>
+            <mat-panel-description>
+                <button mat-stroked-button color="primary" (click)="crearPaciente()">Registrar Paciente</button>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+    </mat-expansion-panel>
+    <mat-expansion-panel hideToggle expanded="true" [style.overflow]="'auto'">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                Pacientes
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <table mat-table [dataSource]="pacienteList()" class="mat-elevation-z8">
+
+            <ng-container matColumnDef="nombre">
+                <th mat-header-cell *matHeaderCellDef [style.textAlign]="'center'">Nombre</th>
+                <td mat-cell *matCellDef="let element" [style.textAlign]="'center'"> {{element.usuario.persona.nombre}}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="apellido">
+                <th mat-header-cell *matHeaderCellDef [style.textAlign]="'center'">Apellido</th>
+                <td mat-cell *matCellDef="let element" [style.textAlign]="'center'">
+                    {{element.usuario.persona.apellido}}</td>
+            </ng-container>
+            <ng-container matColumnDef="tipo_documento">
+                <th mat-header-cell *matHeaderCellDef [style.textAlign]="'center'">Tipo de documento</th>
+                <td mat-cell *matCellDef="let element" [style.textAlign]="'center'">
+                    {{element.usuario.persona.tipo_documento}}</td>
+            </ng-container>
+            <ng-container matColumnDef="numero_documento">
+                <th mat-header-cell *matHeaderCellDef [style.textAlign]="'center'">Numero de documento</th>
+                <td mat-cell *matCellDef="let element" [style.textAlign]="'center'">
+                    {{element.usuario.persona.numero_documento}}</td>
+            </ng-container>
+
+            <!-- Opciones Column -->
+            <ng-container matColumnDef="opciones" stickyEnd>
+                <th mat-header-cell *matHeaderCellDef aria-label="row actions">Editar</th>
+                <td mat-cell *matCellDef="let element">
+                    <button matMiniFab (click)="editarPaciente(element)">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="['nombre','apellido','tipo_documento','numero_documento','opciones']">
+            </tr>
+            <tr mat-row
+                *matRowDef="let row; columns: ['nombre','apellido','tipo_documento','numero_documento','opciones'];">
+            </tr>
+        </table>
+    </mat-expansion-panel>
+</mat-accordion>

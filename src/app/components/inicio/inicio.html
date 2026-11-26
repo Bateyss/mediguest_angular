@@ -1,0 +1,47 @@
+<mat-toolbar>
+    <button matIconButton [matMenuTriggerFor]="menu">
+        @if (logged()) {
+        <mat-icon>account_circle</mat-icon>
+        }
+        @if (!logged()) {
+        <mat-icon>menu</mat-icon>
+        }
+    </button>
+    <span [style.marginLeft]="'1em'"></span>
+    <span>
+        <img (click)="homeClick()" ngSrc="logo_mini.png" ngSrcset="100w, 100w" width="50" height="50" />
+        <!-- <img (click)="homeClick()" [style.height]="'100%'" [style.maxHeight]="'2em'" src="logo.png"> -->
+    </span>
+    <span [style.marginLeft]="'1em'"></span>
+</mat-toolbar>
+
+<mat-menu #menu="matMenu">
+    @for (menu of menusList(); track menu) {
+    <button mat-menu-item [routerLink]="menu.ruta" routerLinkActive="active-menu-item">{{menu.nombre}}</button>
+    }
+
+    <mat-divider></mat-divider>
+
+    @if (logged()) {
+    <button mat-menu-item [hidden]="logged()==false" (click)="cerrarSesion()">
+        <mat-icon>account_circle_off</mat-icon>
+        <span>Cerrar Sesion</span>
+    </button>
+    <mat-divider></mat-divider>
+    }
+
+    <button mat-menu-item (click)="limpiarDatos()">
+        <mat-icon>clear</mat-icon>
+        <span>Limpiar Datos</span>
+    </button>
+    <mat-divider></mat-divider>
+
+    <mat-slide-toggle [(ngModel)]="isChecked" (change)="onThemeSwitchChange()">Colores:
+        {{isChecked()?'Oscuro':'Claro'}}</mat-slide-toggle>
+</mat-menu>
+
+<div class="container-fluid">
+    <div class="row">
+        <router-outlet (activate)="routerActivated($event)"></router-outlet>
+    </div>
+</div>

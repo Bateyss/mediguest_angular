@@ -1,0 +1,7 @@
+<h2 mat-dialog-title>
+  {{ data.mode === 'create' ? 'Crear' : 'Editar' }} Expediente</h2>
+
+<!-- Formulario para crear/editar cita -->
+@if (expedienteForm && formConfigs().length) {
+<app-shared-form [form]="expedienteForm" [formConfigs]="formConfigs()" (formSubmit)="save()"></app-shared-form>
+}
